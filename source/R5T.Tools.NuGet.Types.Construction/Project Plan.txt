@@ -1,0 +1,4 @@
+R5T.Tools.NuGet.Types.Construction - A construction console entry-point for the R5T.Tools.NuGet.Types library (A base-library of types for the NuGet tool.).
+
+Goals
+
