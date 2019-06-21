@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 
-using R5T.NetStandard.IO;
 using R5T.NetStandard.IO.Paths;
 using R5T.NetStandard.IO.Paths.Extensions;
 using R5T.Tools.NuGet.IO;
@@ -16,32 +15,58 @@ namespace R5T.Tools.NuGet.IO
 {
     public static class Utilities
     {
-        //public static PackageID GetPackageID()
+        public static NupkgFileName GetNupkgFileName(PackageID packageID, Version version)
+        {
+            var packageFileSystemName = Utilities.GetPackageNupkgFileSystemName(packageID);
+            var versionFileSystemName = Utilities.GetVersionFileSystemName(version);
+            var nupkgFileNameWithoutExtension = Utilities.GetNupkgFileNameWithoutExtension(packageFileSystemName, versionFileSystemName);
+
+            var nupkgFileName = PathUtilities.GetFileName(nupkgFileNameWithoutExtension, FileExtensions.Nupkg).AsNupkgFileName();
+            return nupkgFileName;
+        }
 
         public static NuspecFileName GetNuspecFileName(PackageID packageID)
         {
-            var packageFileSystemName = Utilities.GetPackageFileSystemName(packageID);
-            var nuspecFileNameWithExtension = Utilities.GetFileNameWithoutExtension(packageFileSystemName);
-            var nuspecFileName = PathUtilities.GetFileName(nuspecFileNameWithExtension, NuspecFileExtension.Instance).AsNuspecFileName();
+            var packageFileSystemName = Utilities.GetPackageNuspecFileSystemName(packageID);
+            var nuspecFileNameWithoutExtension = Utilities.GetNuspecFileNameWithoutExtension(packageFileSystemName);
+            var nuspecFileName = PathUtilities.GetFileName(nuspecFileNameWithoutExtension, NuspecFileExtension.Instance).AsNuspecFileName();
             return nuspecFileName;
         }
 
         public static PackageDirectoryName GetPackageDirectoryName(PackageID packageID)
         {
-            var packageFileSystemName = Utilities.GetPackageFileSystemName(packageID);
+            var packageFileSystemName = Utilities.GetPackageNuspecFileSystemName(packageID);
             var packageDirectoryName = packageFileSystemName.Value.AsPackageDirectoryName();
             return packageDirectoryName;
         }
 
-        public static FileNameWithoutExtension GetFileNameWithoutExtension(PackageFileSystemName packageFileSystemName)
+        public static FileNameWithoutExtension GetNuspecFileNameWithoutExtension(PackageFileSystemName packageFileSystemName)
         {
             var fileNameWithoutExtension = packageFileSystemName.Value.AsFileNameWithoutExtension();
             return fileNameWithoutExtension;
         }
 
-        public static PackageFileSystemName GetPackageFileSystemName(PackageID packageID)
+        public static FileNameWithoutExtension GetNupkgFileNameWithoutExtension(PackageFileSystemName packageFileSystemName, VersionFileSystemName versionFileSystemName)
+        {
+            var nupkgFileNameWithoutExtension = PathUtilities.GetFileNameWithoutExtension(packageFileSystemName, versionFileSystemName);
+            return nupkgFileNameWithoutExtension;
+        }
+
+        /// <summary>
+        /// Value is the lower-case version of the package ID.
+        /// </summary>
+        public static PackageFileSystemName GetPackageNuspecFileSystemName(PackageID packageID)
         {
             var packageFileSystemName = packageID.Value.ToLowerInvariant().AsPackageFileSystemName();
+            return packageFileSystemName;
+        }
+
+        /// <summary>
+        /// Value is the same as the package ID.
+        /// </summary>
+        public static PackageFileSystemName GetPackageNupkgFileSystemName(PackageID packageID)
+        {
+            var packageFileSystemName = packageID.Value.AsPackageFileSystemName();
             return packageFileSystemName;
         }
 

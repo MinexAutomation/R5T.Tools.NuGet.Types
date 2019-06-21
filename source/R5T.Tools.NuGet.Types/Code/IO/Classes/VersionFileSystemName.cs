@@ -1,11 +1,11 @@
 ﻿using System;
 
-using R5T.NetStandard;
+using R5T.NetStandard.IO.Paths;
 
 
 namespace R5T.Tools.NuGet.IO
 {
-    public class VersionFileSystemName : TypedString
+    public class VersionFileSystemName : FileNameSegment
     {
         public VersionFileSystemName(string value)
             : base(value)
