@@ -7,7 +7,8 @@ using R5T.NetStandard.IO.Paths;
 using R5T.Tools.NuGet.IO;
 using R5T.Tools.NuGet.IO.Extensions;
 
-using PathUtilities = R5T.NetStandard.IO.Paths.Utilities;
+using PathUtilities = R5T.NetStandard.IO.Paths.UtilitiesExtra;
+using PathUtilitiesExtra = R5T.NetStandard.IO.Paths.UtilitiesExtra;
 using NuGetIoUtilities = R5T.Tools.NuGet.IO.Utilities;
 
 
@@ -59,7 +60,7 @@ namespace R5T.Tools.NuGet
         {
             var packageDirectoryName = NuGetIoUtilities.GetPackageDirectoryName(packageID);
 
-            var packageDirectoryPath = PathUtilities.Combine(repository.DirectoryPath, packageDirectoryName).Value.AsPackageDirectoryPath();
+            var packageDirectoryPath = PathUtilitiesExtra.Combine(repository.DirectoryPath, packageDirectoryName).Value.AsPackageDirectoryPath();
 
             LocalDirectoryNugetRepository.ListAllPackageVersions(packageDirectoryPath, writer);
         }
@@ -68,7 +69,7 @@ namespace R5T.Tools.NuGet
         {
             var packageDirectoryName = NuGetIoUtilities.GetPackageDirectoryName(packageID);
 
-            var packageDirectoryPath = PathUtilities.Combine(repository.DirectoryPath, packageDirectoryName).Value.AsPackageDirectoryPath();
+            var packageDirectoryPath = PathUtilitiesExtra.Combine(repository.DirectoryPath, packageDirectoryName).Value.AsPackageDirectoryPath();
             return packageDirectoryPath;
         }
 
@@ -78,7 +79,7 @@ namespace R5T.Tools.NuGet
 
             var versionDirectoryName = NuGetIoUtilities.GetVersionDirectoryName(packageVersion);
 
-            var packageVersionDirectoryPath = PathUtilities.Combine(packageDirectoryPath, versionDirectoryName).Value.AsVersionDirectoryPath();
+            var packageVersionDirectoryPath = PathUtilitiesExtra.Combine(packageDirectoryPath, versionDirectoryName).Value.AsVersionDirectoryPath();
             return packageVersionDirectoryPath;
         }
 
