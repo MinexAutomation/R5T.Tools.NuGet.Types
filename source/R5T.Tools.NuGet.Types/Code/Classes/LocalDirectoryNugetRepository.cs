@@ -30,6 +30,13 @@ namespace R5T.Tools.NuGet
             }
         }
 
+        public static void ListAllPackagesAndVersions(DirectoryPath localPackageRepositoryDirectoryPath, TextWriter writer)
+        {
+            var localDirectoryNugetRepository = new LocalDirectoryNugetRepository(localPackageRepositoryDirectoryPath);
+
+            LocalDirectoryNugetRepository.ListAllPackagesAndVersions(localDirectoryNugetRepository, writer);
+        }
+
         public static void ListAllPackageVersions(DirectoryPath packageDirectoryPath, TextWriter writer)
         {
             foreach (var versionDirectoryPath in packageDirectoryPath.EnumerateDirectories())
@@ -51,7 +58,7 @@ namespace R5T.Tools.NuGet
         {
             var packageSpecification = NuGetIoUtilities.GetPackageSpecification(nuspecFilePath);
 
-            var versionForDisplay = packageSpecification.Version.ToString();
+            var versionForDisplay = packageSpecification.Version.ToStringDisplay();
 
             writer.WriteLine($"{packageSpecification.ID} {versionForDisplay}");
         }
@@ -65,12 +72,27 @@ namespace R5T.Tools.NuGet
             LocalDirectoryNugetRepository.ListAllPackageVersions(packageDirectoryPath, writer);
         }
 
+        public static void ListAllPackageVersions(DirectoryPath localPackageRepositoryDirectoryPath, PackageID packageID, TextWriter writer)
+        {
+            var localDirectoryNugetRepository = new LocalDirectoryNugetRepository(localPackageRepositoryDirectoryPath);
+
+            LocalDirectoryNugetRepository.ListAllPackageVersions(localDirectoryNugetRepository, packageID, writer);
+        }
+
         public static PackageDirectoryPath GetPackageDirectoryPath(LocalDirectoryNugetRepository repository, PackageID packageID)
         {
             var packageDirectoryName = NuGetIoUtilities.GetPackageDirectoryName(packageID);
 
             var packageDirectoryPath = PathUtilitiesExtra.Combine(repository.DirectoryPath, packageDirectoryName).Value.AsPackageDirectoryPath();
             return packageDirectoryPath;
+        }
+
+        public static PackageDirectoryPath GetPackageDirectoryPath(DirectoryPath localPackageRepositoryDirectoryPath, PackageID packageID)
+        {
+            var localDirectoryNugetRepository = new LocalDirectoryNugetRepository(localPackageRepositoryDirectoryPath);
+
+            var output = LocalDirectoryNugetRepository.GetPackageDirectoryPath(localDirectoryNugetRepository, packageID);
+            return output;
         }
 
         public static VersionDirectoryPath GetPackageVersionDirectoryPath(LocalDirectoryNugetRepository repository, PackageID packageID, Version packageVersion)
@@ -81,6 +103,14 @@ namespace R5T.Tools.NuGet
 
             var packageVersionDirectoryPath = PathUtilitiesExtra.Combine(packageDirectoryPath, versionDirectoryName).Value.AsVersionDirectoryPath();
             return packageVersionDirectoryPath;
+        }
+
+        public static VersionDirectoryPath GetPackageVersionDirectoryPath(DirectoryPath localPackageRepositoryDirectoryPath, PackageID packageID, Version packageVersion)
+        {
+            var localDirectoryNugetRepository = new LocalDirectoryNugetRepository(localPackageRepositoryDirectoryPath);
+
+            var output = LocalDirectoryNugetRepository.GetPackageVersionDirectoryPath(localDirectoryNugetRepository, packageID, packageVersion);
+            return output;
         }
 
         public static bool PackageExists(LocalDirectoryNugetRepository repository, PackageID packageID, Version packageVersion)
@@ -110,6 +140,14 @@ namespace R5T.Tools.NuGet
             return true;
         }
 
+        public static bool PackageExists(DirectoryPath localPackageRepositoryDirectoryPath, PackageID packageID, Version packageVersion)
+        {
+            var localDirectoryNugetRepository = new LocalDirectoryNugetRepository(localPackageRepositoryDirectoryPath);
+
+            var output = LocalDirectoryNugetRepository.PackageExists(localDirectoryNugetRepository, packageID, packageVersion);
+            return output;
+        }
+
         public static void DeletePackage(LocalDirectoryNugetRepository repository, PackageID packageID, Version packageVersion)
         {
             var packageVersionDirectoryPath = LocalDirectoryNugetRepository.GetPackageVersionDirectoryPath(repository, packageID, packageVersion);
@@ -117,6 +155,13 @@ namespace R5T.Tools.NuGet
             {
                 packageVersionDirectoryPath.Delete();
             }
+        }
+
+        public static void DeletePackage(DirectoryPath localPackageRepositoryDirectoryPath, PackageID packageID, Version packageVersion)
+        {
+            var localDirectoryNugetRepository = new LocalDirectoryNugetRepository(localPackageRepositoryDirectoryPath);
+
+            LocalDirectoryNugetRepository.DeletePackage(localDirectoryNugetRepository, packageID, packageVersion);
         }
 
         #endregion
